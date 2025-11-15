@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { PromptItem, LogEntry, GenerationResult, Settings } from './types';
 import { generateImageFromReference, generateImageFromText } from './services/geminiService';
-import { UploadIcon, FileExcelIcon, PlayIcon, DownloadIcon, SpinnerIcon, TrashIcon, CheckCircleIcon, SparklesIcon, KeyIcon } from './components/Icons';
+import { UploadIcon, FileExcelIcon, PlayIcon, DownloadIcon, SpinnerIcon, TrashIcon, CheckCircleIcon, SparklesIcon, KeyIcon, TextIcon } from './components/Icons';
 
 declare const XLSX: any; // From CDN
 declare const JSZip: any; // From CDN
@@ -526,12 +526,34 @@ const App: React.FC = () => {
                                     </button>
                                 </div>
                                 
-                                <p className="text-xs text-gray-400 bg-gray-700/50 p-2 rounded-md mb-4">
-                                    {batchMode === 'edit'
-                                        ? 'Requires a Reference Image and a Prompt File. Aspect ratio of the reference image will be preserved.'
-                                        : 'Requires a Prompt File only. Uses the Aspect Ratio selected above.'
-                                    }
-                                </p>
+                                {batchMode === 'edit' ? (
+                                    <div className="text-xs text-gray-400 bg-gray-700/50 p-3 rounded-md mb-4 space-y-3">
+                                        <p>
+                                            <strong>Cách hoạt động:</strong> Chế độ này dùng 'Ảnh Gốc' của bạn làm điểm bắt đầu. Với mỗi 'câu lệnh' trong file, nó sẽ tạo ra một ảnh mới đã được chỉnh sửa.
+                                        </p>
+                                        <div className="flex items-center justify-around space-x-1 text-center text-gray-300 font-medium">
+                                            <div className="flex flex-col items-center">
+                                                <div className="w-10 h-10 bg-gray-600 rounded flex items-center justify-center mb-1"><UploadIcon /></div>
+                                                <span>Ảnh Gốc</span>
+                                            </div>
+                                            <span className="text-2xl font-light text-indigo-400">+</span>
+                                            <div className="flex flex-col items-center">
+                                                <div className="w-10 h-10 bg-gray-600 rounded flex items-center justify-center mb-1"><TextIcon /></div>
+                                                <span>Câu Lệnh</span>
+                                            </div>
+                                            <span className="text-2xl font-light text-indigo-400">=</span>
+                                            <div className="flex flex-col items-center">
+                                                <div className="w-10 h-10 bg-gray-600 rounded flex items-center justify-center mb-1 text-yellow-300"><SparklesIcon /></div>
+                                                <span>Ảnh Mới</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="text-xs text-gray-400 bg-gray-700/50 p-3 rounded-md mb-4">
+                                        <p><strong>Cách hoạt động:</strong> Chế độ này chỉ cần 'File câu lệnh'. Nó sẽ tạo một ảnh hoàn toàn mới cho mỗi câu lệnh, sử dụng 'Tỷ Lệ Khung Hình' đã chọn ở mục "Single Image".</p>
+                                    </div>
+                                )}
+
 
                                 <button
                                     onClick={handleStartBatchGeneration}
